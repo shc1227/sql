@@ -4,7 +4,7 @@ FROM emp;
 --  FROM : 데이터를 조회할 테이블 명시
 --  SELECT : 테이블에 있는 컴럼명, 조회 하고자 하는 컴럼명
              테이블의 모든 컴럼을 조회할 경우 *를 기술
-SELECT *
+SELECT empno, ename
 FROM EMP;
 
 SELECT *
