@@ -313,9 +313,9 @@ WHERE job = 'SALESMAN'
 
 논리연산(AND, OR 실습 WHERE13)
  emp 테이블에서 job이 SALESMAN이거나 사원번호가 78로 시작하는 직원의 정보를 다음과 같이 조회하세요.
- (like 연산자사용)
+ --(like 연산자사용하지 않고)
 SELECT *
 FROM emp
 WHERE job = 'SALESMAN'
-    OR empno = '78%';    
+    OR empno like'78%';    
     
