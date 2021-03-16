@@ -251,7 +251,7 @@ FROM emp
 WHERE ename NOT LIKE 'S%';
 
 NOT IN 연산자 사용시 주의점 : 비교값중에 null이 포함되면
-                            데이터가 조회되지 않는다.
+                            데이터가 조회되지 않는다.--(
 
 SELECT *
 FROM emp
@@ -261,7 +261,7 @@ WHERE mgr IN(7698, 7839, NULL);
 SELECT *
 FROM emp
 WHERE mgr NOT IN(7698, 7839, NULL);
-!(mgr = 7698 OR mgr = 7839 OR mgr = null);
+!(mgr = 7698 OR mgr = 7839 OR mgr = null);/*********************************************/
 ==>mgr != 7698 AND mgr != 7839 AND mgr != null; 의미
         TRUE FALSE 의가 없음 AND FALSE
 
@@ -317,5 +317,22 @@ WHERE job = 'SALESMAN'
 SELECT *
 FROM emp
 WHERE job = 'SALESMAN'
-    OR empno like'78%';    
+    OR empno IN('7839','7844','7876');    
     
+SELECT *
+FROM emp;
+WHERE job = 'SALESMAN'
+    OR SUBSTR(empno,1,2)='78';        
+
+SELECT *
+FROM emp
+WHERE SUBSTR(empno, 1, 2)='78' OR
+    job = 'SALESMAN';
+    
+
+SELECT empno, ename, job, mgr, hiredate, sal, comm, deptno
+FROM emp
+WHERE job = 'SALESMAN' 
+    OR empno BETWEEN 7800 AND 7899
+    OR empno BETWEEN 780 AND 789
+    OR empno BETWEEN 78 AND 78;      
