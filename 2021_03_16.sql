@@ -115,6 +115,7 @@ ORDER BY job, empno DESC;
     - emp 테이블에서 10번 부서(deptno) 혹은 30번 부서에 속하는 사람중
       급여(sal)가 1500이 넘는 사람들만 조회하고 이름으로 내림차순 정렬되도록
       쿼리르 작성하세요.      
+
 SELECT * 
 FROM emp 
 WHERE (deptno = 10 or deptno =30) /*(deptno = '10'or deptno ='30') ==>deptno IN(10,30)*/
@@ -150,9 +151,14 @@ ROWNUM : 행번호를 부여하는 특수 키워드(오라클에서만 제공)
 3번째 페이지 : 11~14번
 
 ******인란인 뷰: 실행 순서 바꾸는 효과, 인란인 뒤에도 별칭이 가능하다.
+SELECT *
+(SELECT ROWNUM AS RN,empno,ename
+FROM(SELECT empno,ename
+FROM emp
+ORDER BY ename
+));
 
-SELECT ROWNUM, empno, ename
-FROM emp;
+
 
 SELECT ROWNUM, empno, ename
 FROM emp
@@ -172,12 +178,22 @@ FROM (SELECT empno, ename
       FROM emp
       ORDER BY ename)) /*(절)을 붙으면 테이블로 취급*/
 WHERE rn BETWEEN (:page - 1)* :pageSize + 1 AND :page * :pageSize;      ==> :<- 변수를 지정할 때 사용
-      
+
+
+SELECT *
+FROM(SELECT ROWNUM AS rn,ENAME,JOB
+FROM(SELECT ename,job
+FROM emp
+ORDER BY ENAME))
+WHERE rn BETWEEN 6 AND 11;
+
+
+
 WHERE rn BETWEEN 1 AND 5; /*1페이지*/
 WHERE rn BETWEEN 6 AND 10;/*2페이지*/
 WHERE rn BETWEEN 11 AND 15;/*3페이지*/
 
-SELECT ROWNUM,emp.* (앞에 어떤 문장이 있을 아스테리스크에 어디에 해당하는 지표시, EMP.EMPNO도 표시할수 있다.)
+SELECT ROWNUM, emp.* -->(앞에 어떤 문장이 있을 아스테리스크에 어디에 해당하는 지표시, EMP.EMPNO도 표시할수 있다.)
 FROM emp e;--->(테이블의 알리아스 emp AS e ==> X ,emp e ==>O )
 
 pageSize : 5건
