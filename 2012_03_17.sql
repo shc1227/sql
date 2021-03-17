@@ -78,11 +78,12 @@ SELECT 'HELLO' || ','|| 'WORLD',
     INSTR('HELLO, WORLD','O') INSTR,
     INSTR('HELLO, WORLD','O', 6) INSER2,
     LPAD('HELLO, WORLD', 15, '*') LPAD,
-    LPAD('HELLO, WORLD', 15, '-') LPAD,
+    RPAD('HELLO, WORLD', 15, '-') RPAD,
     REPLACE('HELLO, WORLD', 'O','X') REPALCE,
      -- 공백을 제거, 문자열의 앞과 뒷부분에 있는 공백만
     TRIM('  HELLO, WORLD  ') TRIM,
-    TRIM('D' FROM 'HELLO, WORLD') TRIM
+    TRIM('D' FROM 'HELLO, WORLD') TRIM2
+    
 FROM dual;
 
 
@@ -94,6 +95,10 @@ FROM dual;
     
 SELECT MOD(10,3)
 FROM DUAL;
+
+SELECT ROUND(10.54,0)
+FROM DUAL;
+
 
 SELECT  
 ROUND(105.54,1) ROUND1, -- 반올림 결과가 소수점 첫번째 자리까지 나오도록 : 소수 둘째자리에서 반올림    : 105.5
