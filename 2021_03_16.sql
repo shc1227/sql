@@ -131,7 +131,7 @@ ORDER BY ename DESC;
 
 ROWNUM : 행번호를 부여하는 특수 키워드(오라클에서만 제공)
  *제약사항 
-    - ROWNUM은 WHERE 절에서도 사용 가능하다.
+    - ①ROWNUM은 WHERE 절에서도 사용 가능하다.
       단 ROWNUM의 사용을 1부터 사용하는 경우에만 사용 가능
       WHERE ROWNUM BETWEEN 1 AND 5 ==> O
       WHERE ROWNUM BETWENN 6 AND 10 ==> X
@@ -139,9 +139,9 @@ ROWNUM : 행번호를 부여하는 특수 키워드(오라클에서만 제공)
       WHERE ROWNUM = 2; ==> X
       WHERE ROWNUM <10; ==> O
       WHERE ROWNUM <10; ==> X
-      SQL 절은 다음의 순서로 실행된다.
-      FROM => WHERE => SELECT => ORDER BY
-      ORDER BY 와 ROWNUM을 동시에 사용하면 정렬된 기준으로 ROWNUM이 부여되지 않는다.
+      ②SQL 절은 다음의 순서로 실행된다.
+         : FROM => WHERE => SELECT => ORDER BY
+      ③ORDER BY 와 ROWNUM을 동시에 사용하면 정렬된 기준으로 ROWNUM이 부여되지 않는다.
       (SELECT 절이 먼저 실행되므로 ROWNUM이 부여된 상태에서 ORDER BY 절에 의해 정렬이 된다.)
       
 전체 데이터 : 14건
@@ -225,13 +225,11 @@ WHERE RN BETWEEN 11 AND 14;
 emp 테이블에서 사원 정보 이름컬럼으로 오름차순 적용 헀을 때의 
 11번~14번째 행을 다음과 같이 조회하는 쿼리를 작성해보세요.
 
-SELECT *
+SELECT a.*
 FROM
 (SELECT ROWNUM AS RN, empno, ename
 FROM
 (SELECT empno, ename
 FROM emp
-ORDER BY ename))
+ORDER BY ename))a
 WHERE RN BETWEEN 11 AND 14;
-
-
