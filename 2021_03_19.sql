@@ -59,7 +59,7 @@ group by deptno;
         
         
         JOIN
-            1.중복을 최소화 하는 RDBMS방식으로 설계하는 겨우
+            1.중복을 최소화 하는 RDBMS방식으로 설계하는 경우
             2.emp테이블에는 부서코드만존재, 부서정보를 담은 dept테이블 별도로 생성
             3.emp테이블과 dept테이블의 연결고리(deptno)로 조인하여 실제 부서명을 조회한다.
             
@@ -76,6 +76,8 @@ group by deptno;
             
         SELECT *
         FROM emp NATURAL JOIN dept;
+        
+        
         
         SELECT ename, job
         FROM emp NATURAL JOIN dept;
