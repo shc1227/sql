@@ -53,8 +53,22 @@ WHERE product.pid =cycle.pid(+)
 --***********실습5]과제 실습4를 바탕으로 고객 이름,컬럼추가하기
 
 WHERE, GROUP BY(그룹핑),JOIN
+SELECT product.pid,pnm,:cid,NVL(cycle.day,0) DAY,NVL(cycle.cnt,0) CNT, buyer_bankname
+FROM   product left outer join cycle on(cycle.pid = product.pid AND cid = :cid );
+
+SELECT product.pid, pnm, :cid, cnm, NVL(day, 0)  DAY, NVL(cnt, 0) CNT
+FROM product LEFT OUTER JOIN cycle ON (product.pid = cycle.pid AND cycle.cid = :cid)
+    JOIN customer ON (:cid = customer.cid);
 
 
+
+
+
+SELECT product.pid,pnm,:cid,NVL(cycle.day,0) DAY,NVL(cycle.cnt,0) CNT ,ROWNUM(buyer_bankname)
+FROM   product ,cycle ,buyer
+WHERE product.pid =cycle.pid(+)
+  AND cid(+) = :cid
+  ADN ; 
 JOIN 
 문법
  : ANSI/ ORACLE
@@ -199,15 +213,23 @@ WHERE SIDO = :SIDO
  
  
  --행을 컬럼으로변경(PIVOT)
- SELECT sido, sigungu,
-    ROUND( (SUM(DECODE(storecategory,'BURGER KING',1,0)) +
-    SUM(DECODE(storecategory,'KFC',1,0)) +
-    SUM(DECODE(storecategory,'MACDONAL',1,0)) )/
+  SELECT sido, sigungu,
+      ROUND( (SUM(DECODE(storecategory, 'BURGER KING', 1, 0)) + 
+   SUM(DECODE(storecategory, 'KFC', 1, 0)) +
+    SUM(DECODE(storecategory, 'MACDONALD', 1, 0)) )/
     DECODE(SUM(DECODE(storecategory,'LOTTERIA',1,0)),0,1,SUM(DECODE(storecategory,'LOTTERIA',1,0))),2) idx
  FROM burgerstore
  GROUP BY sido, sigungu
  ORDER BY idx desc;
  
+ 
+
+ 
+
+SELECT *
+FROM burgerstore
+WHERE sido = '강원'
+  AND sigungu = '춘천시';
  
  
  
