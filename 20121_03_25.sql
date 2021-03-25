@@ -13,8 +13,11 @@ FROM cycle
   AND pid IN ( SELECT pid
         FROM cycle
         WHERE cid =2);  
-        
-        
+select * 
+from cycle 
+WHERE cid =1
+AND pid IN(select pid from cycle where cid = 2);
+    
 실습 sub7
 
 customer, cycle, product 테이블을 이용하여 cid=1인 고객이 애음하는 제품중 cid=2인 고객도 애음하는 제품의 애음정보를 조회하고 
@@ -23,6 +26,15 @@ select * from customer;
 select * from cycle;
 select * from product;
 
+SELECT * 
+FROM customer a, cycle b, product c
+WHERE a.cid =1 
+AND a.cid = b.cid 
+AND b.pid = c.pid
+AND b.pid in(
+    select pid 
+    from cycle 
+    where cid=2) ;
 
   
 
