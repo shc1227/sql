@@ -117,7 +117,7 @@ group by deptno;
      
      
       SELECT *
-      FROM emp JOIN dept on(emp.deptno = dept.deptno);
+      FROM emp  JOIN dept on(emp.deptno = dept.deptno);
       
       --사원번호, 사원 이름,해당사원의 상사 사번, 해당사원의 상사이름 : JOIN WITH ON 을 이용하여 쿼리 작성
       
@@ -147,11 +147,12 @@ group by deptno;
      order by ename;
      
      SELECT *
-     FROM emp;
+     FROM dept;
      
      SELECT *
      FROM salgrade;
      
+    
      -- salgrade를 이용하여 직원의 급여 등급 구하기
      -- empno, ename,sal, 급여등급    
     
@@ -185,6 +186,7 @@ group by deptno;
      from emp,dept
      where emp.deptno= dept.deptno
      and sal>2500;
+     
      
      
      실습 join3

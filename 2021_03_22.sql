@@ -5,9 +5,10 @@ SELECT *
 FROM lprod;
 
 
-SELECT lprod.lprod_gu,lprod.lprod_nm,prod.prod_id,prod.prod_name
-FROM lprod,prod
-WHERE lprod.lprod_gu = prod.prod_lgu;
+SELECT a.lprod_gu,a.lprod_nm,b.prod_id,b.prod_name
+FROM lprod a ,prod b
+WHERE a.lprod_gu = b.prod_lgu;
+
 
 --데이터결합join 실습2
 erd다이어그램을참고하여buyer,prod테이블을 조인하여 buyer별 담당하는 제품 정보를 다음과 같은 결과각 나오도록 쿼리를 작성해보세요.
@@ -74,6 +75,13 @@ FROM customer cu, cycle cy, product pr
 WHERE cu.cid = cy.cid AND  cy.pid = pr.pid
 GROUP BY pr.pnm,cu.CID,CNM,cy.PID,PNM,cnt;
 
+SELECT cu.CID,CNM,cy.PID,PNM,SUM(cy.cnt) cnt
+FROM customer cu, cycle cy, product pr
+WHERE cu.cid = cy.cid AND  cy.pid = pr.pid
+GROUP BY pr.pnm,cu.CID,CNM,cy.PID,PNM,cnt;
+
+
+
 실습7
 
 SELECT c.pid, pnm,sum(cnt) cnt
@@ -116,11 +124,17 @@ SELECT e.ename, m.ename
 FROM emp e, emp m
 WHERE e.mgr = m.empno(+);
 
+SELECT e.ename 부하a , m.ename "상사3 Aa"
+FROM emp e, emp m
+WHERE e.mgr(+) = m.empno;
+
+
+
 SELECT e.ename, m.ename, m.deptno   
-FROM emp e LEFT OUTER JOIN emp m ON(e.mgr = m.empno) AND m.deptno = 10;--연결조건은 맞으나 값이 없음
+FROM emp e LEFT OUTER JOIN emp m ON(e.mgr = m.empno); AND m.deptno = 10;--연결조건은 맞으나 값이 없음
 
                     ---
-        
+        select * from emp;
 SELECT e.ename, m.ename, m.deptno
 FROM emp e LEFT OUTER JOIN emp m ON(e.mgr = m.empno)
 WHERE m.deptno = 10;

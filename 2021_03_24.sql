@@ -54,6 +54,9 @@ SUBQUERY : 쿼리의 일부로 사용되는 쿼리
         ==> 메인쿼리가 없으면 독자적으로 실행 불가능
     .비상호 연관 서브 쿼리 -(non - correlated subquery) - 메인 쿼리의 컬럼을 서브 쿼리에서 가져다 쓰지 않은 경우
         ==> 메인쿼리가 없어도 서브쿼리만 실행가능
+   
+   ==> 복잡하지만 원하는  논리적인 조건에문을 작성할수 있다.
+   
     
 서브쿼리(실습 sub1)
 평균급여보다 높은 급여를 받는 직원의 수를 조회하세요.
@@ -155,7 +158,8 @@ WHERE deptno IN (10,20);
     SELECT *
     FROM emp
     WHERE empno NOT IN (SELECT NVL(mgr,9999)
-                        FROM emp);
+                        FROM emp
+                        GROUP BY mgr);
    누군가의 매니져인사람
     SELECT *
     FROM emp

@@ -10,9 +10,9 @@
     
     
 outerjoin실습1]
-BUYPROD테이블에 구매일자가 2005년 1월 25일DLS EPDLXJSMS 3품목 밖에 없다.
+BUYPROD테이블에 구매일자가 2005년 1월 25일인 데이터 3품목 밖에 없다.
 모든 품목이 나올수 있도록 쿼리를 작성해보세요.
-    
+
        
 SELECT buy_date, buy_prod, prod_id, prod_name, buy_qty
 FROM buyprod, prod
@@ -28,9 +28,9 @@ buy_date컬럼이 null인 항목이 안나오도록 다음처럼 데이터를 �
 SELECT TO_DATE(:yyyymmdd,'YYYY/MM/DD'), buy_prod, prod_id, prod_name, buy_qty
 FROM buyprod, prod
 WHERE buyprod.buy_prod(+) = prod.prod_id
-  AND buy_date(+) = TO_DATE(:yyyymmdd,'YYYY/MM/DD');  
+  AND buy_date = TO_DATE(:yyyymmdd,'YYYY/MM/DD');  
   실습3]
-  SELECT TO_DATE(:yyyymmdd,'YYYY/MM/DD'), buy_prod, prod_id, prod_name, NVL(buy_qty,0)<--nvl사용
+  SELECT TO_DATE(:yyyymmdd,'YYYY/MM/DD'), buy_prod, prod_id, prod_name, NVL(buy_qty,0)/*<--nvl사용*/
 FROM buyprod, prod
 WHERE buyprod.buy_prod(+) = prod.prod_id
   AND buy_date(+) = TO_DATE(:yyyymmdd,'YYYY/MM/DD');
@@ -43,6 +43,11 @@ CYCLE,PRODUCT테이블을 이용하여 고객이 애음하는 제품명칭을 �
 
 SELECT product.pid,pnm,:cid,NVL(cycle.day,0) DAY,NVL(cycle.cnt,0) CNT
 FROM   product left outer join cycle on(cycle.pid = product.pid AND cid = :cid );
+
+SELECT *
+FROM CYCLE A,PRODUCT B
+WHERE A.PID(+) = B.PID
+AND CID(+) =1;
 
 SELECT product.pid,pnm,:cid,NVL(cycle.day,0) DAY,NVL(cycle.cnt,0) CNT
 FROM   product ,cycle 
@@ -60,15 +65,20 @@ SELECT product.pid, pnm, :cid, cnm, NVL(day, 0)  DAY, NVL(cnt, 0) CNT
 FROM product LEFT OUTER JOIN cycle ON (product.pid = cycle.pid AND cycle.cid = :cid)
     JOIN customer ON (:cid = customer.cid);
 
+SELECT product.pid, pnm, :cid,  NVL(day, 0)  DAY, NVL(cnt, 0) CNT,cnm
+FROM product LEFT  JOIN cycle ON (product.pid = cycle.pid AND cycle.cid = :cid)
+    LEFT OUTER JOIN customer ON (:cid = customer.cid);
 
-
-
+SELECT product.pid, pnm, :cid,  NVL(day, 0)  DAY, NVL(cnt, 0) CNT,cnm
+FROM product a, cycle b , customer c
+WHERE product.pid = cycle.pid 
+  AND 
+  
 
 SELECT product.pid,pnm,:cid,NVL(cycle.day,0) DAY,NVL(cycle.cnt,0) CNT ,ROWNUM(buyer_bankname)
 FROM   product ,cycle ,buyer
 WHERE product.pid =cycle.pid(+)
-  AND cid(+) = :cid
-  ADN ; 
+  AND cid(+) = :cid ; 
 JOIN 
 문법
  : ANSI/ ORACLE
