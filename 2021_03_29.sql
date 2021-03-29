@@ -157,14 +157,6 @@ ORDER BY DECODE(d,1,iw+1,iw);
 SELECT TO_CHAR(LAST_DAY(TO_DATE(:YYYYMM,'YYYYMM')),'DD')
 FROM DUAL;
 
-
-
-
-
-select TO_CHAR(sysdate,'YYYY-MM-DD'), 
-from dual;
-
-
 SELECT  LPAD(ROWNUM,2,'0') DD
 FROM dict
 WHERE ROWNUM <= 31;
@@ -226,6 +218,8 @@ CONNECT BY SMITH의 mgr 컬럽값 = 내앞으로 읽을 행 empno
 SELECT * FROM dept_h;
 최상위 노드부터 리프 노드까지 탐색하는 계층 쿼리 작성
 (LPAD를 이용한 시각적 표현까지 포함)
+
+
 
 
 SELECT LPAD(' ' ,(LEVEL-1)*4) || deptnm

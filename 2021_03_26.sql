@@ -334,68 +334,7 @@ Note
      SELECT *
     FROM TABLE(DBMS_XPLAN.DISPLAY);
  
-  EXPLAIN PLAN FOR
-    SELECT job,ROWID
-    FROM emp
-    WHERE job = 'MANAGER'
-        AND ename LIKE '%C'; <--정령은 앞글자에 정렬은 한것을 찾아야하는 데 그렇지 않기 에의미가 없다.
-    
-     SELECT *
-    FROM TABLE(DBMS_XPLAN.DISPLAY);
-    
-    
- Index Access
- -소수의 데이터를 조회할 때 유리(응답속도가 필요할 때)
-  - Index를 사용하는 Input/Output Single Block I/O 
- - 다량의 데이터를 인덱스로 접근할 경우 속도가 느리다(2~3000건)
 
-
- Table Access
- - 테이블의 모든 데이터를 읽고서 처리를 해야하는 겨우 인덱스를 통해 모든 테이블로 점급하는 경우다 빠름
-  - I/O 기준이 multi block
-
-DDL(테이브에 인덱스가 많다면)
-1.테이블의 빈공간을 찾아 데이터를 입력한다.
-2.인덱스의 구성 컬럼을 기준으로 정렬된 위치를 찾아 인덱스 저장
-3.인덱스는 B*트리 구조이고, root node 부터 leaf node 까지의 depth가 항상 같도록 밸런스를 유지한다.
-4.즉 데이터 입력으로 밸런스가 무너질경우 밸런스를 맞추는 추가 작업이 필요.
-5.2-4까지의 과정을 각 인덱스 별로 반복한다.
-
-인덱스가 많아 질 경우 위 과정이 인덱스 개수 만큼 반복 되기 때문에 UPDATE, INSERT, DELETE 시 부하가 커진다.
-인덱스는 SELECT 실행시 조회 성능개선에 유리하지만 데이터 변경시 부하가 생긴다.
-테이블에 과도한 수의 인덱스를 생성하는 것은 바람직 하지 않음.
-하나의 쿼리를 위한 인덱스 설계는 쉬움.
-시스템에서 실행되는 모든 쿼리를 분석하여 적절한 개수의 최적의 인덱스를 설계하는 것이 힘듬.
-
-
-달력만들기
-주어진것 : 년월 6자리 문자열 ex-202103
-만들것 : 해당 년월에 해당하는 달력 (7칸테이블)
-
---(LEVEL은 1부터 시작)
-SELECT TO_DATE(:YYYYMM,'YYYYMM') + LEVEL-1 AS dt,
-       (TO_DATE(:YYYYMM,'YYYYMM') + (LEVEL-1),'D') d,
-       (TO_DATE(:YYYYMM,'YYYYMM') + (LEVEL-1),'IW') iw,
-
-FROM dual
-CONNECT BY LEVEL <= (SELECT TO_CHAR(LAST_DAY(TO_DATE(:YYYYMM,'YYYYMM')),'DD') FROM DUAL);
-
-
-'202103' ==>31;
-SELECT TO_CHAR(LAST_DAY(TO_DATE(:YYYYMM,'YYYYMM')),'DD')
-FROM DUAL;
-
-
-
-
-
-select TO_CHAR(sysdate,'YYYY-MM-DD'), 
-from dual;
-
-
-SELECT  LPAD(ROWNUM,2,'0') DD
-FROM dict
-WHERE ROWNUM <= 31;
 
 
 
