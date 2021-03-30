@@ -1,0 +1,32 @@
+이진우(경기도 수원 기차)
+
+1. github 본인 계정에 sql 이라는 이름으로 새로운 원격 저장소 생성
+
+2. D:\A_TeachingMaterial\2.Oracle\other\sql 폴더를 git 로컬 저장소 초기화
+
+3. 2번의 로컬 저장소와 1번의 원격 저장소를 연결 설정
+
+4. test.txt (파일 내용은 test) commit 후 원격저장소에 반영
+working area      staging area      local repository      remote repository
+                ==>                 ==>                     ==> 
+        add(드래그&드랍)   commit(메시지)           push
+
+
+https://www.naver.com/   ==> DNS 서버 ==> 123.122.50.1
+
+git-scm.com 
+GUI clients  
+
+source tree (client)      ==>    git
+SQL developer(client)   ==>    oracle(DBMS) server
+
+
+
+
+
+
+
+
+
+
+
