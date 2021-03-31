@@ -275,7 +275,7 @@ SELECT empno, ename,sal, deptno,
 FROM emp;    
 
 실습 NO_ANA2
-기존의배운냉용르 활용하여
+기존의배운 내용을 활용하여
 모든사원에대해 사원번호,이름,속한 부서의 사원수를 조회하는 쿼리
 
 
