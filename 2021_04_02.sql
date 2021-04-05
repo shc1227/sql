@@ -37,7 +37,7 @@
     1)시퀀스 생성
     CREATE SEQUENCE SEQ_LPROD
     START WITH 10;
-    
+  
     --SELECT SEQ_LPROD.CURRVAL FROM DUAL; --sequence SEQ_LPROD.CURRVAL is not yet defined in this session 해당세션에서 아직 그 시퀀스에 참조할수없다.
     2)자료 삽입
     INSERT INTO LPROD VALUES(SEQ_LPROD.NEXTVAL,'P501','농산물');
@@ -48,7 +48,6 @@
     사용예] 오늘이 2005년 7월 28일인 경우 'mo001' 회원이 제품'P101000004'을
            5개 구입했을 때 CART테이블에 해당 자료를 삽입하는 쿼리를 작성하시오.
            --먼저 날짜를 2005년 7월 28일 변경 후 작성 할 것
-    
     
     **CART_NO 생성    
   SELECT MAX(SUBSTR(CART_NO,9)) 
@@ -137,7 +136,7 @@
         - 중복 값을 허용하지 않는 인덱스
         - NULL 값을 가질 수 있으나 이것도 중복해선느 안됨
         - 기본키(각 데이터는 테이블에서 유일한 값)=>(중복X,NULL X), 외래키 인덱스가 이에 해당
-        (2)Non unique ->null이 하나여야만함
+        (2)Non unique 
         - 중복 값을 허용하는 인데스->null이 여러개여도 된다.
         (3)Normal Index
         - default INDEX
