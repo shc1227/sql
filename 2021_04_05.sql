@@ -18,6 +18,7 @@ CREATE INDEX IDX_PROD_NAME
 CREATE INDEX IDX_CART_NO
     ON CART(SUBSTR(CART_NO,3,6));
         
+        
 **인덱스의 재구성
  - 데이터 테이블을 다른 테이블스페이스로 이동시킨 후
  - 자료의 삽입과 삭제 동작 후 
@@ -103,38 +104,53 @@ END;
     ORDER BY 3 DESC) A
     WHERE ROWNUM = 1;
 
+위 query를 view로구성
+CREATE OR REPLACE VIEW V_MAXAMT
+AS
+    SELECT A.*
+    FROM
+    (SELECT A.CART_MEMBER AS 회원번호,
+           B.MEM_NAME AS 회원명,
+           SUM(C.PROD_PRICE*CART_QTY) AS 구매금액합
+    FROM CART A, MEMBER B, PROD C
+    WHERE A.CART_MEMBER = B.MEM_ID
+      AND A.CART_PROD = C.PROD_ID  
+    GROUP BY A.CART_MEMBER,B.MEM_NAME
+    ORDER BY 3 DESC) A
+    WHERE ROWNUM = 1;
 
 
+SELECT * FROM V_MAXAMT;
+
+(익명블록)
+
+DECLARE
+    V_MID   V_MAXAMT.회원번호%TYPE;
+    V_NAME  V_MAXAMT.회원명%TYPE;
+    V_AMT   V_MAXAMT.구매금액합%TYPE;
+    V_RES   VARCHAR2(100);
+BEGIN
+    SELECT 회원번호,회원명,구매금액합 INTO V_MID,V_NAME,V_AMT
+    FROM V_MAXAMT;
+
+    V_RES:=V_MID||', '||V_NAME||', '||TO_CHAR(V_AMT,'99,999,999');
+
+    DBMS_OUTPUT.PUT_LINE(V_RES);
+END;    
 
 
+(상수사용예)
+키보드로 수하나를 입력 받아 그 값을 반지름으로하는 원의 넓이를 구하시오
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ACCEPT P_NUM PROMPT '원의 반짐름: '
+DECLARE 
+ V_RADIUS NUMBER:= TO_NUMBER('&P_NUM');
+ V_PI CONSTANT NUMBER :=3.1415926;
+ V_RES NUMBER := 0;
+BEGIN
+ V_RES := V_RADIUS*V_RADIUS*V_PI;
+ DBMS_OUTPUT.PUT_LINE('원의 너비 ='||V_RES);
+END;
+ 
+ 
+ 
