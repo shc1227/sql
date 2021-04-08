@@ -161,6 +161,11 @@ ROLLBACK;↑에 초기화시키기
     뷰이름은 V_EMP_SAL01이고 컬럼명은 원본테이블의 컬럼명을 사용
     뷰가 생성된후 뷰와 테이블을 이용하여 해당 사원의 사원번호,사원명,직무명, 급여 출력하는 SQL작성
     
+    SELECT EMPLOYEE_ID,EMP_NAME,HIRE_DATE,SALARY
+    FROM employees
+    WHERE DEPARTMENT_ID = 50 AND SALARY >5000 ;
+    
+    
     
     (뷰생성)
     CREATE OR REPLACE VIEW V_EMP_SAL01

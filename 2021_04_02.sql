@@ -3,7 +3,7 @@
 - 자동으로 증가되는 값을 반환할 수 있는 객체
 - 테이블에 독립적(다수의 테이블에서 동시 참조 가능)
 - 기본키로 설정한 적당한 컬럼이 존재하지 않는 경우 자동으로 증가되는 
-  컬럼의 속성으로 주로 사용된됨
+  컬럼의 속성으로 주로 사용됨
   (사용형식)
   CREATE SEQUENCE 시퀀스명
     [START WITH n]
@@ -105,8 +105,8 @@
    FROM HR.REGIONS;
    
     (테이블 별칭을 사용한 경우)
-    SELECT A.REGION_ ID AS 지역코드,
-           A.REGION_ NAME AS 지역명,
+    SELECT A.REGION_ID AS 지역코드,
+           A.REGION_NAME AS 지역명
       FROM HR.REGIONS A;
       
    (동의어를 사용한 경우)

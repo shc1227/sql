@@ -59,7 +59,7 @@
         - 개발언어의 WHILE문과 같은 기능
         - 조건을 미리 체크하여 조건이 참인 경우에만 반복 처리
         (사용형식)
-        WHEN 조건
+        WHILE 조건
             LOOP
                 반복처리문(등);
         END LOOP;        
@@ -224,7 +224,7 @@
  - 반환값이 없음
  - 컴파일되어서 서버에 보관(실행속도를 증가, 은닉성, 보안성)
  (사용형식)
-    CREATE [OR REPLACE] PROCEDURE 프로시져명[(--IN 안으로 가져올때/OUT  결과를 내보낼때/INOUT 동시에 하는것
+    CREATE [OR REPLACE] PROCEDURE 프로시져명[(--IN 안으로 가져올때/OUT  결과를 내보낼때/INOUT 동시에 하는것 /생략시 IN으로 취급
         매개변수명 [IN | OUT| INOUT] 데이터타입 [:= | DEFAULT] expr1],--데이터타입만 지정하되 크기는 지정하지 않는다.지정시 오류가 발생한다.
         매개변수명 [IN | OUT| INOUT] 데이터타입 [:= | DEFAULT] expr2],
                                     :
@@ -295,6 +295,206 @@
     
     SELECT * FROM REMAIN;
     
+    (테이블 컬럼명 변경)
+        ALTER TABLE 테이블명
+            RENAME COLUMN 변경대상컬럼명 TO 변경컬럼명;
+        ex)TEMP 테이블의 ABC를 QAZ라는 컬럼명으로 변경;
+        ALTER TABLE TEMP
+            RENAME COLUMN ABC TO QAZ;
+    2. 컬럼 데이터타입(크기) 변경
+       ALTER TABLE 테이블명
+         MODIFY 컬럼명 데이터타입(크기);
+          ex)TEMP 테이블의 ABC컬럼 NUMBER(10)으로 변경하는 경우
+          ALTER TABLE TEMP 
+            MODIFY ABC NUMBER(10);
+         -- 해당컬럼의 내용을 모두 지워야 변경 가능
     
     
+    사용예) 오늘이 2005년  1월 31일 이라고 가정하고 오늘까지 발생된 상품입고 정보를 이용하여
+           재고 수불 테이블을 UPDATE 하는 프로시져를 생성하시오
+           1. 프로시져명 : PROC_REMAIN_IN
+           2. 매개변수 : 상품코드, 매입수량
+           3. 처리 내용 : 해당 상품코드에 대한 입고수량, 현재고수량, 날짜 UPDATE
+           
     
+           
+    ** 1. 2005년 상품별 매입수량 집계 --프로시져 밖에서 처리
+       2. 1의 결과 각 행을 PROCEDURE에 전달
+       3. PROCEDURE에서 재고 수불테이블 UPDATE
+        
+           
+(PROCEDURE 생성) --타입만 쓰고 크기를 쓰면 오류 발생
+CREATE OR REPLACE PROCEDURE PROC_REMAIN_IN(
+    P_CODE IN PROD.PROD_ID%TYPE,
+    P_CNT IN NUMBER)                        
+IS
+BEGIN
+    UPDATE REMAIN
+       SET (REMAIN_I,REMAIN_j_99,REMAIN_DATE) = (SELECT REMAIN_I+P_CNT,
+                                                        REMAIN_j_99+P_CNT,
+                                                        TO_DATE('20050131')
+                                                        FROM REMAIN
+                                                        WHERE REMAIN_YEAR = '2005'  
+                                                        AND PROD_ID = P_CODE)
+    WHERE REMAIN_YEAR = '2005'  
+      AND PROD_ID = P_CODE;
+END;
+
+2.프로시져 실행명령
+EXEC | EXECUTE 프로시져명[(매개변수 LIST)];
+-단, 익명블록 등 또다른 프로시져나 함수에서 프로시져 호출시 'EXEC | EXECUTE'는 생략해야 한다.
+    
+    
+(2005년 1월 상품별 매입집계)    
+           SELECT BUY_PROD AS BCODE,
+                  SUM(BUY_QTY) AS  BAMT
+             FROM BUYPROD
+            WHERE BUY_DATE BETWEEN '20050101' AND '20050131'
+            GROUP BY BUY_PROD;      
+            
+(익명블록)
+
+DECLARE
+    CURSOR CUR_BUY_AMT
+    IS
+           SELECT BUY_PROD AS BCODE,
+                  SUM(BUY_QTY) AS  BAMT
+             FROM BUYPROD
+            WHERE BUY_DATE BETWEEN '20050101' AND '20050131'
+            GROUP BY BUY_PROD;
+            
+BEGIN
+    FOR REC01 IN CUR_BUY_AMT LOOP
+        PROC_REMAIN_IN(REC01.BCODE,REC01.BAMT);
+        
+    END LOOP;
+END;
+
+**REMAIN 테이블의 내용을 VIEW로 만들기
+CREATE OR REPLACE VIEW V_REMAIN01
+AS
+    SELECT * FROM REMAIN;
+    
+CREATE OR REPLACE VIEW V_REMAIN02
+AS
+    SELECT * FROM REMAIN;
+    
+    SELECT * FROM V_REMAIN01;
+    SELECT * FROM V_REMAIN02;
+    
+    
+사용예) 회원아이디를 입력 받아 그 회원의 이름, 주소와 직업을 반환하는
+       프로시져를 작성하시오.
+       1. 프로시져명 : PROC_MEM INFO
+       2. 매개변수 : 입력용 : 회원아이디
+                    출력용 : 이름, 주소, 직업
+                    
+(프로시져 생성)
+CREATE OR REPLACE PROCEDURE PROC_MEM_INFO(
+    P_ID IN MEMBER.MEM_ID%TYPE,
+    P_NAME OUT MEMBER.MEM_NAME%TYPE,
+    P_ADDR  OUT VARCHAR2,--크기를 지정해서는 안된다.
+    P_JOB  OUT MEMBER.MEM_JOB%TYPE)
+AS
+
+BEGIN
+    SELECT MEM_NAME, MEM_ADD1||' '||MEM_ADD2,MEM_JOB
+      INTO P_NAME,P_ADDR,P_JOB
+      FROM MEMBER
+     WHERE MEM_ID = P_ID;
+END;
+
+(실행)
+ACCEPT PID PROMPT '회원아이디 : '
+DECLARE
+    V_NAME MEMBER.MEM_NAME%TYPE;
+    V_ADDR VARCHAR2(200);
+    V_JOB  MEMBER.MEM_JOB%TYPE;
+BEGIN 
+    PROC_MEM_INFO('&PID',V_NAME,V_ADDR,V_JOB);
+    DBMS_OUTPUT.PUT_LINE('회원아이디 : '||'&PID');
+    DBMS_OUTPUT.PUT_LINE('회원이름 : '||V_NAME);
+    DBMS_OUTPUT.PUT_LINE('주소 : '||V_ADDR);
+    DBMS_OUTPUT.PUT_LINE('직업 : '||V_JOB);
+END;
+
+
+문제]년도를 입력 받아 해당년도에 구매를 가장 많이한 회원이름과 구매액을 
+     반환하는 프로시져를 작성하시오.
+     1.프로시져명 : PROC_MEM_PTOP
+     2.매개변수 : 입력용 : 년도
+                 출력용 : 회원명, 구매액
+**2005년도 회원별 구매 금액계산해보자
+
+
+/*SELECT C.CART_MEMBER,
+       SUM(C.CART_QTY*P.PROD_PRICE)
+  FROM CART C, PROD P
+ WHERE P.PROD_ID = C.CART_PROD
+   AND ROWNUM=1
+   AND SUBSTR(C.CART_NO,1,4)='2005'
+ GROUP BY C.CART_MEMBER
+ ORDER BY 2 DESC;*/
+ 
+ 
+ 
+CREATE OR REPLACE PROCEDURE PROC_MEM_PTOP(
+    P_YEAR IN CHAR,
+    P_NAME OUT MEMBER.MEM_NAME%TYPE,
+    P_AMT  OUT NUMBER)
+AS    
+BEGIN
+     SELECT M.MEM_NAME, A.AMT INTO P_NAME,P_AMT
+       FROM
+           (SELECT C.CART_MEMBER AS MID,
+                   SUM(C.CART_QTY*P.PROD_PRICE) AS AMT
+              FROM CART C, PROD P
+             WHERE P.PROD_ID = C.CART_PROD
+               AND SUBSTR(C.CART_NO,1,4)=P_YEAR
+             GROUP BY C.CART_MEMBER
+             ORDER BY 2 DESC) A, MEMBER M
+             WHERE M.MEM_ID = A.MID
+               AND ROWNUM=1;
+END;
+ 
+(실행)
+DECLARE
+    V_NAME MEMBER.MEM_NAME%TYPE;
+    V_AMT NUMBER :=0;
+ 
+BEGIN
+   PROC_MEM_PTOP('2005', V_NAME, V_AMT);
+   DBMS_OUTPUT.PUT_LINE('회원명 : ' || V_NAME);
+   DBMS_OUTPUT.PUT_LINE('구매금액 : '|| TO_CHAR(V_AMT,'999,999,999'));
+END;
+
+
+문제]2005년도 구매금액이 없는 회원을 찾아 회원테이블(MEMBER)의 삭제여부
+    컬럼(MEM_DELETE)의 값을 'Y'로 변경하는 프로시져를 작성하시오.
+
+                --구매금액이 없는 회원 : n001;
+                SELECT MEM_ID
+                FROM
+                ((SELECT MEM_ID FROM MEMBER)
+                 MINUS
+                (SELECT CART_MEMBER FROM CART  GROUP BY CART_MEMBER));
+                
+                --
+                
+                
+                
+                
+                SELECT M.MEM_ID
+                FROM MEMBER M, CART C
+                WHERE M.MEM_ID = C.CART_MEMBER(+)
+                  AND 
+                GROUP BY M.MEM_ID;
+                
+                --
+
+
+
+               
+        
+
+

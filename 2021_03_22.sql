@@ -34,11 +34,16 @@ SELECT member.mem_id,member.mem_name,prod_id,prod_name,cart_qty
 FROM prod, cart, member
 WHERE prod.prod_id = cart.cart_prod AND cart.cart_member = member.mem_id;
 
+
+
 --ANTI JOIN
 SELECT member.mem_id,member.mem_name,prod_id,prod_name,cart_qty
 FROM MEMBER JOIN cart ON (cart.cart_member = member.mem_id) 
-        JOIN prod ON ( prod.prod_id = cart.cart_prod );
-        
+            JOIN prod ON ( prod.prod_id = cart.cart_prod );
+
+SELECT mem_id, mem_name, prod_id, prod_name, cart_qty  
+FROM member JOIN cart ON (member.mem_id = cart.cart_member)  
+            JOIN prod ON (cart.cart_prod = prod.prod_id);        
         
         
         
