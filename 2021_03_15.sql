@@ -25,8 +25,9 @@ FROM user_tables;
 /*'81/03/01' ->국가마다 표시 방법이 다르다*/
 
 /*문자를 날짜로 바꿔주는 함수 --> */
+SELECT
 TO_DATE('81/03/01','YY/MM/DD')
-
+FROM DUAL;
 
 /*03/15수업 */
 SELECT *
@@ -255,13 +256,13 @@ NOT IN 연산자 사용시 주의점 : 비교값중에 null이 포함되면
 
 SELECT *
 FROM emp
-WHERE mgr IN(7698, 7839, NULL); 
+WHERE mgr IN (7698, 7839, NULL);
 ==>MGR = 7698 OR 7839 OR mgr = null; 의미
 
 SELECT *
 FROM emp
-WHERE mgr NOT IN(7698, 7839, NULL);
-!(mgr = 7698 OR mgr = 7839 OR mgr = null);/*********************************************/
+WHERE mgr NOT IN(7698, 7839,NULL);
+/*********************************************/
 ==>mgr != 7698 AND mgr != 7839 AND mgr != null; 의미
         TRUE FALSE 의가 없음 AND FALSE
 

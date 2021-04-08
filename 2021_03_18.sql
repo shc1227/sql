@@ -44,6 +44,9 @@ yyyymm = 201912 ->31
 yyyymm = 201911 ->30
 yyyymm = 201602 ->29 (2016년은 윤년)
 
+SELECT :YYYYMM,TO_CHAR(LAST_DAY(TO_DATE(:YYYYMM,'YYYYMM')),'DD')DT
+FROM DUAL;
+
 select :yyyymm,
     TO_CHAR(LAST_DAY(TO_DATE(:YYYYMM, 'YYYYMM')),'DD') DT
 FROM dual;

@@ -44,9 +44,10 @@ DESC emp;
 
 ALIAS : 컬럼의 이름을 변경
         컬럼 | expression [AS] [별칭명]
+------------------------------------        
 *소문자를 쓰고 싶은경우 쌍따옴표를 사용
 알리어스: 컬럼뒤에 이름을 붙혀주는 것
-
+------------------------------------
 empno : number;
 empno + 10 ==> expression(컴럼정보가 아닌 것들도 모드 expressiond이다.)
 *테이블에 있는 값들이 10씩 더해진다.
@@ -91,7 +92,7 @@ float f = 10f;
 long l = 10L
 String s = "Hellow World";
 
-* | {커럼 | 표현식 [AS] [ALIAS],...}
+* | {컬럼 | 표현식 [AS] [ALIAS],...}
 SELECT empno, 10, 'Hello Wordl'
 FROM emp;
 
@@ -172,28 +173,4 @@ to_DATE('193\81/12/11','YYYY/MM/DD')
 SELECT empno, ename,hiredate
 FROM emp
 WHERE hiredeate >= TO_DATE('81/03/01', 'YYYY/MM/DD');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
