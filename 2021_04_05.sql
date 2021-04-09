@@ -152,5 +152,5 @@ BEGIN
  DBMS_OUTPUT.PUT_LINE('원의 너비 ='||V_RES);
 END;
  
- 
+ SELECT * FROM LPROD;
  
