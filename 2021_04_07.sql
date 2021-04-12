@@ -265,7 +265,7 @@
                           :
     CONSTRAINT 외래키설정명1   FOREIGN KEY(컬럼명1[, 컬럼명2,...])
         REFERENCES 테이블명1(컬럼명1[, 컬럼명2,...]) );                   
-        
+commit;        
     CREATE TABLE REMAIN(
          REMAIN_YEAR     CHAR(4) NOT NULL,
          PROD_ID         VARCHAR2(10) NOT NULL,
@@ -330,8 +330,8 @@ CREATE OR REPLACE PROCEDURE PROC_REMAIN_IN(
 IS
 BEGIN
     UPDATE REMAIN
-       SET (REMAIN_I,REMAIN_j_99,REMAIN_DATE) = (SELECT REMAIN_I+P_CNT,
-                                                        REMAIN_j_99+P_CNT,
+       SET (REMAIN_I,REMAIN_J_99,REMAIN_DATE) = (SELECT REMAIN_I+P_CNT,
+                                                        REMAIN_J_99+P_CNT,
                                                         TO_DATE('20050131')
                                                         FROM REMAIN
                                                         WHERE REMAIN_YEAR = '2005'  

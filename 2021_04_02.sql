@@ -37,13 +37,14 @@
     1)시퀀스 생성
     CREATE SEQUENCE SEQ_LPROD
     START WITH 10;
+  DROP SEQUENCE SEQ_LPROD;
   
     --SELECT SEQ_LPROD.CURRVAL FROM DUAL; --sequence SEQ_LPROD.CURRVAL is not yet defined in this session 해당세션에서 아직 그 시퀀스에 참조할수없다.
     2)자료 삽입
     INSERT INTO LPROD VALUES(SEQ_LPROD.NEXTVAL,'P501','농산물');
     INSERT INTO LPROD VALUES(SEQ_LPROD.NEXTVAL,'P502','수산물');
     INSERT INTO LPROD VALUES(SEQ_LPROD.NEXTVAL,'P503','임산물');
-    SELECT * FROM LPROD;
+    
     
     사용예] 오늘이 2005년 7월 28일인 경우 'mo001' 회원이 제품'P101000004'을
            5개 구입했을 때 CART테이블에 해당 자료를 삽입하는 쿼리를 작성하시오.
