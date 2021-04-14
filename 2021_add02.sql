@@ -76,8 +76,8 @@ SELECT A.PROD_BUYER AS 거래처코드,
              WHERE BP.BUY_PROD = PR.PROD_ID
                AND BU.BUYER_ID = PR.PROD_BUYER
                AND BUY_DATE BETWEEN '20050101' AND '20050331'
-            HAVING SUM(PR.PROD_COST *BP.BUY_QTY ) > 5000000   
-          GROUP BY PR.PROD_BUYER , BU.BUYER_NAME
+             GROUP BY PR.PROD_BUYER , BU.BUYER_NAME
+            HAVING SUM(PR.PROD_COST *BP.BUY_QTY ) > 5000000   -- 집계함수의 조건을 처리할때는 HAVING을 사용하여야한다.그리고 그룹바이 다음에 사용
           ORDER BY 1;
            
     
@@ -86,7 +86,7 @@ SELECT A.PROD_BUYER AS 거래처코드,
     문제2)사원테이블(employees)에서 부서별 평균급여보다 급여를 많이 받는 직원들의 수를 부서별로 조회하시오.
      Alias는 부서코드,부서명, 부서평균급여, 인원수( 평균더많이 받는 사람) ,COUNT( ) AS 평균이상수
      
-     SELECT D.DEPARTMENT_ID AS 부서코드, D.DEPARTMENT_NAME AS 부서명,  ROUND(AVG(E.SALARY),2) AS 부서평균급여, AB.인원수
+     SELECT D.DEPARTMENT_ID AS 부서코드, D.DEPARTMENT_NAME AS 부서명,  ROUND(AVG(E.SALARY),2) AS 부서평균급여, NVL(AB.인원수,0)
        FROM EMPLOYEES E, DEPARTMENTS D,
                                         (SELECT  D.DEPARTMENT_ID AS ADEPT,D.DEPARTMENT_NAME, COUNT(*) AS 인원수
                                            FROM EMPLOYEES E, DEPARTMENTS D       
@@ -102,9 +102,52 @@ SELECT A.PROD_BUYER AS 거래처코드,
     GROUP BY D.DEPARTMENT_ID,D.DEPARTMENT_NAME, AB.인원수
     ORDER BY 1;
     
+    --SEM------------------------------------------------------------------------
+   (메인쿼리)
+    SELECT TBLA.DEPARTMENT_ID 부서코드,
+           TBLA.DEPARTMENT_NAME 부서명,
+           (SELECT ROUND(AVG(SALARY)) AS ASAL
+                                       FROM EMPLOYEES
+                                      GROUP BY DEPARTMENT_ID) 부서평균급여,
+           TBLB.CNT 인워수
+      FROM DEPARTMENTS TBLA,(SELECT A.DEPARTMENT_ID, COUNT(*) AS CNT
+                               FROM (SELECT DEPARTMENT_ID, ROUND(AVG(SALARY)) AS ASAL
+                                       FROM EMPLOYEES
+                                      GROUP BY DEPARTMENT_ID) A, EMPLOYEES B
+                              WHERE A.DEPARTMENT_ID = B.DEPARTMENT_ID
+                                AND B.SALARY >= A.ASAL
+                              GROUP BY A.DEPARTMENT_ID
+                              ORDER BY 1) TBLB
+    WHERE TBLA.DEPARTMENT_ID = TBLB.DEPARTMENT_ID;
     
+    
+   (서브쿼리 : 부서평균급여) 
+    SELECT DEPARTMENT_ID,
+           ROUND(AVG(SALARY),0) AS ASAL
+      FROM EMPLOYEES
+     GROUP BY DEPARTMENT_ID;
+   (서브쿼리 : 부서평균급여 보다 많은 급여를 받는 사람)  
+   
+    SELECT A.DEPARTMENT_ID, COUNT(*) AS CNT
+      FROM (SELECT DEPARTMENT_ID, ROUND(AVG(SALARY)) AS ASAL
+              FROM EMPLOYEES
+             GROUP BY DEPARTMENT_ID) A, EMPLOYEES B
+     WHERE A.DEPARTMENT_ID = B.DEPARTMENT_ID
+       AND B.SALARY >= A.ASAL
+     GROUP BY A.DEPARTMENT_ID
+     ORDER BY 1;
   
-    
+  
+  
+            SELECT DEPARTMENT_ID, ROUND(AVG(SALARY)) AS ASAL
+              FROM EMPLOYEES
+             GROUP BY DEPARTMENT_ID;
+  
+  
+  
+  
+  
+    -----------------------------------------------------------------------------
     (SELECT  D.DEPARTMENT_ID,D.DEPARTMENT_NAME, COUNT(*) AS 인원수
        FROM EMPLOYEES E, DEPARTMENTS D       
        WHERE E.DEPARTMENT_ID = D.DEPARTMENT_ID(+) -- 조건
@@ -115,7 +158,7 @@ SELECT A.PROD_BUYER AS 거래처코드,
     ORDER BY D.DEPARTMENT_ID) AB
     
       SELECT  E.DEPARTMENT_ID, COUNT(*) AS 인원수
-       FROM EMPLOYEES E
+       FROM EMPLOYEES E , DEPARTMENT_ID
        WHERE E.SALARY > 9500
          AND  E.DEPARTMENT_ID = 20
     GROUP BY E.DEPARTMENT_ID;
